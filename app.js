@@ -4,6 +4,15 @@ const cookieParser = require("cookie-parser");
 const { jwtMiddleware } = require("./libs/token");
 const cors = require("cors");
 const router = require("./router");
+const { sequelize } = require("./models/index");
+sequelize
+	.sync()
+	.then(() => {
+		console.log("DB Connected...");
+	})
+	.catch((err) => {
+		console.log("DB Unconnected: ", err);
+	});
 
 const port = process.env.port || 5000;
 

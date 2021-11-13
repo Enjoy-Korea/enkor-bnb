@@ -9,7 +9,7 @@
     ],
     
     "parserOptions": {
-      "ecmaVersion": 7,
+      "ecmaVersion": 8,
       "sourceType": "script",
       "ecmaFeatures": {
         "jsx": false
@@ -21,7 +21,6 @@
       "node": true,
       "jest": true
     },
-    
     "ignorePatterns": [
       "node_modules/",
       ".eslintrc.js"
