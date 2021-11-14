@@ -55,7 +55,7 @@ db.user.hasMany(db.reservation, { foreignKey: "userId", sourceKey: "id" });
 db.reservation.belongsTo(db.user, { foreignKey: "userId", targetKey: "id" });
 
 // room - reservation : 1대 1 관계 설정
-// db.room.belongsTo(db.reservation);
-// db.reservation.hasOne(db.room);
+db.room.hasOne(db.reservation, { foreignKey: "roomId", sourceKey: "id" });
+db.reservation.belongsTo(db.room, { foreignKey: "roomId", targetKey: "id" });
 
 module.exports = db;

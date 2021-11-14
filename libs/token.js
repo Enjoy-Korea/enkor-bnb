@@ -13,18 +13,20 @@ const decodeToken = (token) => {
 	return jwt.verify(token, jwtSecretKey);
 };
 
-const jwtMiddleware = (req, res, next) => {
+const jwtMiddleware = async (req, res, next) => {
 	const token = req.headers.authorization;
+
 	// token이 없으면 바로 return
 	if (token === undefined) {
 		next();
 		return;
 	}
 	try {
-		const decoded = decodeToken(token);
+		const decoded = await decodeToken(token);
+		const id = decoded.id;
 		const userEmail = decoded.userEmail;
 		const userName = decoded.userName;
-		req.user = { userEmail, userName };
+		req.user = { id, userEmail, userName };
 	} catch (err) {
 		req.user = null;
 
