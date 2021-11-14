@@ -20,7 +20,7 @@ async function signup(req, res, next) {
 			token
 		});
 	} catch (err) {
-		if (err.message === "이미 존재하는 아이디입니다.") err.status = 404;
+		if (err.message === "이미 존재하는 아이디입니다.") err.status = 409;
 		next(err);
 	}
 }

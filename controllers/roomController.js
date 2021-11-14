@@ -4,17 +4,17 @@ async function roomList(req, res, next) {
 	try {
 		const pageNo = Number(req.query.pageNo || 1);
 		const priceSort = req.query.sort;
-		console.log(priceSort);
+
 		const sorting = priceSort === "0" ? "desc" : "asc";
-		console.log(sorting);
+
 		const pageSize = Number(req.query.pageSize || 5);
 		let offset = (pageNo - 1) * pageSize;
 
 		let roomList = await room.findAll({
 			order: [
-				priceSort !== null
+				priceSort !== undefined
 					? ["pricePerDay", sorting]
-					: ["createdAt", "DESC"]
+					: ["id", "desc"]
 			],
 			limit: pageSize,
 			offset: offset
@@ -38,7 +38,8 @@ async function roomInfo(req, res, next) {
 	try {
 		const roomsId = req.params.id;
 
-		let roomInfo = await room.findOne({ roomsId });
+		const roomInfo = await room.findOne({ where: { id: roomsId } });
+
 		if (!roomInfo) throw new Error("존재하지 않는 페이지입니다.");
 
 		res.status(200).json({ roomInfo });
