@@ -11,6 +11,7 @@ async function roomList(req, res, next) {
 		let offset = (pageNo - 1) * pageSize;
 
 		let roomList = await room.findAll({
+			attributes: { exclude: ["id", "description", "reservationType"] },
 			order: [
 				priceSort !== undefined
 					? ["pricePerDay", sorting]
