@@ -12,9 +12,18 @@ const mockReservation = {
 	create: jest.fn()
 };
 
+const newReservation = {
+	id: 1,
+	roomId: "5",
+	reservationType: true,
+	userId: 10,
+	updatedAt: "2021-11-14T14:32:11.715Z",
+	createdAt: "2021-11-14T14:32:11.715Z"
+};
+
 const reservation = {
 	query: {
-		id: 1
+		id: 6
 	},
 	user: {
 		id: 1
@@ -23,7 +32,7 @@ const reservation = {
 
 const reservationInfo = {
 	params: {
-		id: 1
+		id: 6
 	},
 	user: {
 		id: 1,
@@ -39,14 +48,6 @@ const failInfo = {
 		id: 1,
 		email: "test@test.com"
 	}
-};
-const newReservation = {
-	id: 1,
-	roomId: "2",
-	reservationType: true,
-	userId: 10,
-	updatedAt: "2021-11-14T14:32:11.715Z",
-	createdAt: "2021-11-14T14:32:11.715Z"
 };
 
 describe("Room Test", () => {

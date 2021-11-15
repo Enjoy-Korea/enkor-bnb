@@ -23,11 +23,13 @@ const roomInfo = {
 		id: 1
 	}
 };
+
 const failRoomId = {
 	params: {
 		id: 200
 	}
 };
+
 describe("Room Test", () => {
 	it("Room List Success", async () => {
 		// given

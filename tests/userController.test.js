@@ -1,14 +1,5 @@
 const User = require("../controllers/userController");
 
-const token = "tokenTest";
-const user = {
-	body: {
-		userEmail: "test8@test.com",
-		userPw: "test",
-		userName: "test"
-	}
-};
-
 const res = {
 	status: jest.fn(() => res),
 	json: jest.fn()
@@ -18,6 +9,15 @@ const mockUser = {
 	create: jest.fn(),
 	findOne: jest.fn(),
 	checkLogin: jest.fn()
+};
+
+const token = "tokenTest";
+const user = {
+	body: {
+		userEmail: "test10@test.com",
+		userPw: "test",
+		userName: "test"
+	}
 };
 
 const newUser = {
