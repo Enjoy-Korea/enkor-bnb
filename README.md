@@ -89,7 +89,7 @@ $ npm start
 
 ```
 📁 config
-└── 📄 config.json
+└── 📄 config.js
 📁 controllers
 ├── 📄 reservationController.js
 ├── 📄 roomController.js
@@ -103,7 +103,14 @@ $ npm start
 └── 📄 user.js
 📁 seeders
 └── 📄 20211113125755-test.js
+📁 tests
+├── 📄 reservationController.test.js
+├── 📄 roomController.test.js
+└── 📄 userController.test.js
 📄 .env
+📄 babel.config.js
+📄 jest.config.json
+📄 houses.sample.json
 📄 app.js
 📄 package.json
 📄 package-lock.json
