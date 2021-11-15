@@ -120,6 +120,7 @@ $ npm start
 - config : db 연결 파일
 - libs : jwt 파일
 - seeders : 여러 개의 매물 데이터를 한 번에 삽입하기 위해 생성된 seeder 폴더
+    - `sequelize db:seed:all` 명령어를 이용해 삽입 
 - tests : 유닛 테스트
 
 
