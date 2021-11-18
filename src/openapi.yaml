@@ -1,0 +1,391 @@
+openapi: 3.0.0
+info:
+  title: Enkor-bnb API
+  description: API document for Enkor-bnb.
+  version: 1.0.0
+  contact:
+    email: 8annahxxl@gmail.com
+servers:
+  - url: http://localhost:8080
+    description: Development server
+tags:
+  - name: auth
+  - name: house
+  - name: reservation
+
+paths:
+  /api/users/join:
+    post:
+      tags:
+        - auth
+      summary: 회원가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAuth"
+        required: true
+      responses:
+        "201":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuthResponse"
+        "400":
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: 이미 존재하는 유저
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/users/login:
+    post:
+      tags:
+        - auth
+      summary: 로그인
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAuth"
+        required: true
+      responses:
+        "200":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuthResponse"
+        "400":
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 인증 실패
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/house:
+    get:
+      tags:
+        - house
+      summary: 모든 매물 조회
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: 현재 페이지
+          schema:
+            type: number
+            example: 1
+        - name: pageSize
+          in: query
+          required: true
+          description: 가져올 매물 개수
+          schema:
+            type: number
+            example: 5
+        - name: priceSort
+          in: query
+          description: 가격순 정렬 옵션
+          schema:
+            type: string
+            example: desc
+      responses:
+        "200":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllHouseResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/house/{id}:
+    get:
+      tags:
+        - house
+      summary: 매물 조회
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "200":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HouseResponse"
+        "404":
+          description: 찾을 수 없음
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/reservation:
+    post:
+      tags:
+        - reservation
+      summary: 숙박 시설 예약
+      parameters:
+        - name: houseId
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "201":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationResponse"
+        "400":
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - jwtAuth: []
+    get:
+      tags:
+        - reservation
+      summary: 내 예약 조회
+      responses:
+        "201":
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationResponse"
+        "403":
+          description: 권한 없음
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - jwtAuth: []
+
+components:
+  schemas:
+    UserAuth:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+      example:
+        email: 8annahxxl@gmail.com
+        password: password
+    UserAuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        accessToken:
+          type: string
+      required:
+        - success
+        - accessToken
+      example:
+        success: true
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTYzNzA2ODUwMywiZXhwIjoxNjM3NDE0MTAzfQ.4de0SLJFt4C0Sx7OVGNht1SjDUEPrH7422HtNZVjURA"
+    House:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        university:
+          type: string
+        houseType:
+          type: string
+        pricePerDay:
+          type: number
+        images:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - description
+        - address
+        - university
+        - houseType
+        - pricePerDay
+        - images
+        - createdAt
+        - updatedAt
+      example:
+        id: 1
+        name: 산포리 펜션
+        description: "입실/퇴실 시간\n ㅁ 입실시간 : 오후 3시 ~ 오후 10시\n ㅁ 퇴실시간 : 익일 오전 11시 까지\n ㅁ 오후 10시 이후의 입실은 미리 연락부탁드립니다."
+        address: 경상북도 울진군 근남면 세포2길 1-21
+        university: 울진대학교
+        houseType: 펜션
+        pricePerDay: 30000
+        images: {}
+        createdAt: "2021-11-16 13:14:50"
+        updatedAt: "2021-11-16 13:14:50"
+    HouseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+      required:
+        - success
+        - data
+    AllHouse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        university:
+          type: string
+        image:
+          type: string
+        houseType:
+          type: string
+        pricePerDay:
+          type: string
+      required:
+        - id
+        - name
+        - university
+        - image
+        - houseType
+        - pricePerDay
+      example:
+        id: 1
+        name: 산포리 펜션
+        address: 경상북도 울진군 근남면 세포2길 1-21
+        university: 울진대학교
+        images: {}
+        houseType: 펜션
+        pricePerDay: 30000
+    AllHouseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/AllHouse"
+      required:
+        - success
+        - data
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        userEmail:
+          type: string
+          format: email
+        houseId:
+          type: number
+        houseName:
+          type: string
+        houseAddress:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - userEmail
+        - houseId
+        - houseName
+        - houseAddress
+        - createdAt
+        - updatedAt
+      example:
+        id: 1
+        userId: 1
+        userEmail: 8annahxxl@gmail.com
+        houseId: 1
+        houseName: 산포리 펜션
+        houseAddress: 경상북도 울진군 근남면 세포2길 1-21
+        createdAt: "2021-11-16 13:14:50"
+        updatedAt: "2021-11-16 13:14:50"
+    ReservationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reservation"
+      required:
+        - success
+        - data
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+      example:
+        success: false
+        message: 에러 메시지
+  securitySchemes:
+    jwtAuth:
+      description: Bearer token authorization with JWT
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
